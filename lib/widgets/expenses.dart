@@ -26,12 +26,25 @@ class _ExpensesState extends State<Expenses> {
     ),
   ];
 
+  void _addExpense(ExpensesModel expense) {
+    setState(() {
+      _registerExpenses.add(expense);
+    });
+  }
+  void _removeExpense(ExpensesModel expense) {
+    setState(() {
+      _registerExpenses.remove(expense);
+    });
+  }
   void _openAddExpenseModal() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context, 
-      builder: (ctx) => NewExpense(),
-      );
+      builder: (ctx) => NewExpense(
+      onAddExpense: _addExpense,));
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +61,10 @@ class _ExpensesState extends State<Expenses> {
       body: Column(
         children: [
           Text("The Chart"),
-          Expanded(child: ExpensesList(expenses: _registerExpenses)),
+          Expanded(child: ExpensesList(
+            expenses: _registerExpenses,
+            onRemoveExpense: _removeExpense,
+            )),
         ],
       ),
     );
